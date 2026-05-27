@@ -55,7 +55,7 @@ public class InAppPurchaseUtils {
 	}
 
 	public static boolean isFullVersionAvailable(@NonNull OsmandApplication app, boolean checkDevBuild) {
-		return isFullVersionPurchased(app) || checkDeveloperBuildIfNeeded(app, checkDevBuild);
+		return false && (isFullVersionPurchased(app) || checkDeveloperBuildIfNeeded(app, checkDevBuild));
 	}
 
 	public static boolean isMapsPlusAvailable(@NonNull OsmandApplication app) {
