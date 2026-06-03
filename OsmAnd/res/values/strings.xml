@@ -10,6 +10,9 @@
 	- For wording and consistency, please note https://docs.osmand.net/docs/technical/contributions/translating-osmand
 	Thx - Hardy
 -->
+	<string name="tracks_backup_promo_button">Get OsmAnd Pro</string>
+	<string name="tracks_backup_promo_description">Sync your tracks across devices and Web with OsmAnd Pro.</string>
+	<string name="tracks_backup_promo_title">Back up and sync your tracks</string>
 	<string name="free_download_limit_reached">Free download limit reached</string>
 	<string name="free_download_limit_reached_description">Unlock unlimited map downloads and updates</string>
 	<string name="get_unlimited_downloads">Get unlimited downloads</string>

@@ -49,7 +49,7 @@ public class PurchasingUtils {
 
 			InAppSubscriptionIntroductoryInfo info = subscription.getIntroductoryInfo();
 			if (info != null) {
-				if (info.isFreeTrial()) {//
+				if (!info.isFreeTrial()) {//
 					subscriptionButton.setDiscount("");
 					subscriptionButton.setDiscountApplied(false);
 					subscriptionButton.setPrice(info.getFreeTrialDescription(app));
