@@ -46,6 +46,7 @@ import net.osmand.plus.chooseplan.MapsPlusPlanFragment;
 import net.osmand.plus.chooseplan.OsmAndFeature;
 import net.osmand.plus.chooseplan.OsmAndProPlanFragment;
 import net.osmand.plus.chooseplan.button.PriceButton;
+import net.osmand.plus.chooseplan.button.SubscriptionButton;
 import net.osmand.plus.inapp.InAppPurchaseHelper;
 import net.osmand.plus.inapp.InAppPurchaseUtils;
 import net.osmand.plus.inapp.InAppPurchases.InAppPurchase;
@@ -217,22 +218,22 @@ public class DiscountBottomSheet extends BaseMaterialBottomSheetDialogFragment {
 				? selectedFeature.getDescription(getApp())
 				: args.getString(TITLE_KEY));
 
-		String mapsPlus = getString(R.string.maps_plus);
-		String osmAndPro = getString(R.string.osmand_pro);
-		TextView secondaryDescription = view.findViewById(R.id.secondary_description);
-		if (selectedFeature != null) {
-			String availablePlans = osmAndPro;
-			if (selectedFeature.isAvailableInMapsPlus()) {
-				availablePlans = getString(R.string.ltr_or_rtl_combine_via_or, mapsPlus, osmAndPro);
-			}
-			String secondaryDesc = String.format(getString(R.string.you_can_get_feature_as_part_of_pattern),
-					getString(selectedFeature.getTitleId()), availablePlans);
-			SpannableString message = UiUtilities.createSpannableString(secondaryDesc, Typeface.BOLD, mapsPlus, osmAndPro);
-			secondaryDescription.setText(message);
-			secondaryDescription.setVisibility(View.VISIBLE);
-		} else {
-			secondaryDescription.setVisibility(View.GONE);
-		}
+//		String mapsPlus = getString(R.string.maps_plus);
+//		String osmAndPro = getString(R.string.osmand_pro);
+//		TextView secondaryDescription = view.findViewById(R.id.secondary_description);
+//		if (selectedFeature != null) {
+//			String availablePlans = osmAndPro;
+//			if (selectedFeature.isAvailableInMapsPlus()) {
+//				availablePlans = getString(R.string.ltr_or_rtl_combine_via_or, mapsPlus, osmAndPro);
+//			}
+//			String secondaryDesc = String.format(getString(R.string.you_can_get_feature_as_part_of_pattern),
+//					getString(selectedFeature.getTitleId()), availablePlans);
+//			SpannableString message = UiUtilities.createSpannableString(secondaryDesc, Typeface.BOLD, mapsPlus, osmAndPro);
+//			secondaryDescription.setText(message);
+//			secondaryDescription.setVisibility(View.VISIBLE);
+//		} else {
+//			secondaryDescription.setVisibility(View.GONE);
+//		}
 
 		FlowLayout listContainer = view.findViewById(R.id.list_container);
 		listContainer.removeAllViews();
@@ -372,6 +373,7 @@ public class DiscountBottomSheet extends BaseMaterialBottomSheetDialogFragment {
 		cancelDescription.setVisibility(visible ? View.VISIBLE : View.GONE);
 		if (!visible) {
 			selectedPriceButton = null;
+			updateDiscountBadge(view);
 			return;
 		}
 
@@ -413,7 +415,32 @@ public class DiscountBottomSheet extends BaseMaterialBottomSheetDialogFragment {
 
 		setupApplyButton(view, purchaseHelper);
 		setupCancelDescription(cancelDescription);
+		updateDiscountBadge(view);
 		updatePriceButtons(view);
+	}
+
+	private void updateDiscountBadge(@NonNull View view) {
+		TextView discountBadge = view.findViewById(R.id.primary_description_discount);
+		PriceButton<?> discountButton = getDiscountSubscriptionButton();
+		String discount = discountButton != null ? discountButton.getDiscount() : null;
+		discountBadge.setText(discount);
+		discountBadge.setVisibility(Algorithms.isEmpty(discount) ? View.GONE : View.VISIBLE);
+		if (!Algorithms.isEmpty(discount) && discountButton != null) {
+			int discountBgId = discountButton.isDiscountApplied()
+					? R.drawable.purchase_sc_discount_rectangle
+					: R.drawable.purchase_save_discount_rectangle;
+			AndroidUtils.setBackground(discountBadge, getApp().getUIUtilities().getIcon(discountBgId));
+		}
+	}
+
+	@Nullable
+	private PriceButton<?> getDiscountSubscriptionButton() {
+		for (PriceButton<?> button : priceButtons) {
+			if (button instanceof SubscriptionButton && !Algorithms.isEmpty(button.getDiscount())) {
+				return button;
+			}
+		}
+		return null;
 	}
 
 	@NonNull

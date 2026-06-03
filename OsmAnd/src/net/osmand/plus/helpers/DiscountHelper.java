@@ -139,6 +139,7 @@ public class DiscountHelper {
 			@Override
 			protected void onPostExecute(String response) {
 				if (!Algorithms.isEmpty(response)) {
+					response = "{\"url_params\":{\"selected_choose_plan_btn\":\"osmand_test_pro_annual\"},\"application\":{\"net.osmand\":true, \"net.osmand.plus\":true},\"show_day_frequency\":10,\"show_start_frequency\":40,\"icon\":\"ic_action_gift\",\"start\":\"22-05-2026 00:20\",\"description\":\"Подпишитесь на годовую подписку Maps+, Pro со скидкой 50% на первый год!\",\"end\":\"28-06-2026 23:59\",\"message\":\"РАСПРОДАЖА годовой подписки!\",\"oneOfConditions\":[{\"condition\":[{ \"not_purchased_feature\" : \"maps\", \"not_purchased_feature\":\"pro\"}]}],\"url\":\"show-choose-plan:osmand-pro\",\"max_total_show\":20,\"discount\":\"50\"}";
 					processDiscountResponse(response, mapActivity);
 				}
 			}
@@ -182,11 +183,11 @@ public class DiscountHelper {
 							for (int k = 0; k < conditionArr.length(); k++) {
 								JSONObject o = conditionArr.getJSONObject(k);
 								conditionMatch = conditions.matchesCondition(o);
-//								if (!conditionMatch) {
-//									break;
-//								}
+								if (!conditionMatch) {
+									break;
+								}
 							}
-//							oneOfConditionsMatch |= conditionMatch;
+							oneOfConditionsMatch |= conditionMatch;
 						}
 					}
 				} catch (JSONException e) {
@@ -212,7 +213,7 @@ public class DiscountHelper {
 				if (true || discountChanged
 						|| (app.getAppInitializer().getNumberOfStarts() - settings.DISCOUNT_SHOW_NUMBER_OF_STARTS.get() >= showStartFrequency
 						|| System.currentTimeMillis() - settings.DISCOUNT_SHOW_DATETIME_MS.get() > 1000L * 60 * 60 * 24 * showDayFrequency)) {
-					if (true || settings.DISCOUNT_TOTAL_SHOW.get() < maxTotalShow) {
+					if (/*true || */settings.DISCOUNT_TOTAL_SHOW.get() < maxTotalShow) {
 						settings.DISCOUNT_ID.set(discountId);
 						settings.DISCOUNT_TOTAL_SHOW.set(settings.DISCOUNT_TOTAL_SHOW.get() + 1);
 						settings.DISCOUNT_SHOW_NUMBER_OF_STARTS.set(app.getAppInitializer().getNumberOfStarts());

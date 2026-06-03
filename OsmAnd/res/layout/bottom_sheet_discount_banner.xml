@@ -101,30 +101,60 @@
 
 			</LinearLayout>
 
-			<net.osmand.plus.widgets.TextViewEx
-				android:id="@+id/primary_description"
+			<LinearLayout
+				android:id="@+id/primary_description_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="@dimen/content_padding_half"
 				android:gravity="center_horizontal"
+				android:orientation="horizontal"
 				android:paddingLeft="@dimen/content_padding"
-				android:paddingRight="@dimen/content_padding"
-				android:textColor="?android:textColorPrimary"
-				android:textSize="@dimen/default_list_text_size"
-				tools:text="Get OsmAnd Cloud to store all OsmAnd data online." />
+				android:paddingRight="@dimen/content_padding">
 
-			<net.osmand.plus.widgets.TextViewEx
-				android:id="@+id/secondary_description"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/dialog_content_margin"
-				android:letterSpacing="@dimen/text_button_letter_spacing"
-				android:lineSpacingMultiplier="@dimen/info_description_line_spacing_multiplier"
-				android:paddingLeft="@dimen/content_padding"
-				android:paddingRight="@dimen/content_padding"
-				android:textColor="?android:textColorPrimary"
-				android:textSize="@dimen/default_list_text_size"
-				tools:text="You can get OsmAnd Cloud as part of OsmAnd Pro plan." />
+				<net.osmand.plus.widgets.TextViewEx
+					android:id="@+id/primary_description"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:gravity="center_horizontal"
+					android:textColor="?android:textColorPrimary"
+					android:textSize="@dimen/default_list_text_size"
+					tools:text="Get OsmAnd Cloud to store all OsmAnd data online." />
+
+				<net.osmand.plus.widgets.TextViewEx
+					android:id="@+id/primary_description_discount"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:layout_marginLeft="@dimen/content_padding_half"
+					android:layout_marginStart="@dimen/content_padding_half"
+					android:background="@drawable/purchase_sc_discount_rectangle"
+					android:gravity="center"
+					android:letterSpacing="@dimen/description_letter_spacing"
+					android:paddingLeft="@dimen/content_padding_small_half"
+					android:paddingRight="@dimen/content_padding_small_half"
+					android:paddingTop="@dimen/dash_margin"
+					android:paddingBottom="@dimen/dash_margin"
+					android:textColor="?attr/wikivoyage_primary_btn_text_color"
+					android:textSize="@dimen/default_desc_text_size"
+					android:visibility="gone"
+					app:lineHeight="@dimen/default_desc_line_height"
+					app:typefaceWeight="medium"
+					tools:text="-50%"
+					tools:visibility="visible" />
+			</LinearLayout>
+
+<!--			<net.osmand.plus.widgets.TextViewEx-->
+<!--				android:id="@+id/secondary_description"-->
+<!--				android:layout_width="match_parent"-->
+<!--				android:layout_height="wrap_content"-->
+<!--				android:layout_marginTop="@dimen/dialog_content_margin"-->
+<!--				android:letterSpacing="@dimen/text_button_letter_spacing"-->
+<!--				android:lineSpacingMultiplier="@dimen/info_description_line_spacing_multiplier"-->
+<!--				android:paddingLeft="@dimen/content_padding"-->
+<!--				android:paddingRight="@dimen/content_padding"-->
+<!--				android:textColor="?android:textColorPrimary"-->
+<!--				android:textSize="@dimen/default_list_text_size"-->
+<!--				tools:text="You can get OsmAnd Cloud as part of OsmAnd Pro plan." />-->
 
 			<View
 				android:layout_width="match_parent"

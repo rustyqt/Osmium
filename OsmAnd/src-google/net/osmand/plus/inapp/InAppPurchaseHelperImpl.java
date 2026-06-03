@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import com.android.billingclient.api.AccountIdentifiers;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.ProductDetails.SubscriptionOfferDetails;
 import com.android.billingclient.api.ProductDetailsResponseListener;
@@ -468,6 +469,13 @@ public class InAppPurchaseHelperImpl extends InAppPurchaseHelper {
 
 				List<Purchase> completePurchases = new ArrayList<>();
 				Purchase fullVersionPurchase = fullVersion != null ? getPurchase(fullVersion.getSku()) : null;
+//				if(fullVersionPurchase != null) {
+//					BillingManager billingManager = getBillingManager();
+//					ConsumeParams consumeParams = ConsumeParams.newBuilder()
+//							.setPurchaseToken(fullVersionPurchase.getPurchaseToken())
+//							.build();
+//					billingManager.consumeAsync(consumeParams);
+//				}
 				boolean fullVersionPurchased = fullVersionPurchase != null;
 				purchasedLocalFullVersion = fullVersionPurchased;
 				if (fullVersionPurchased) {
