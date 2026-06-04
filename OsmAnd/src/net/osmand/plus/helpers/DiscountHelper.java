@@ -26,6 +26,8 @@ import net.osmand.plus.chooseplan.ChoosePlanFragment;
 import net.osmand.plus.chooseplan.MapsPlusPlanFragment;
 import net.osmand.plus.chooseplan.OsmAndFeature;
 import net.osmand.plus.chooseplan.OsmAndProPlanFragment;
+import net.osmand.plus.chooseplan.button.PurchasingUtils;
+import net.osmand.plus.chooseplan.button.SubscriptionButton;
 import net.osmand.plus.inapp.InAppPurchaseHelper;
 import net.osmand.plus.inapp.InAppPurchaseUtils;
 import net.osmand.plus.inapp.InAppPurchases;
@@ -85,6 +87,7 @@ public class DiscountHelper {
 	private static final String CHOOSE_PLAN_TYPE_EXTERNAL_SENSORS_SUPPORT = "external-sensors-support";
 	private static final String CHOOSE_PLAN_TYPE_PRO = "osmand-pro";
 	private static final String CHOOSE_PLAN_TYPE_MAPS_PLUS = "osmand-maps-plus";
+	private static final String CHOOSE_PLAN_TYPE_GENERAL = "general";
 
 	private static final String FEATURE_PRO = "pro";
 	private static final String FEATURE_MAPS = "maps";
@@ -306,6 +309,91 @@ public class DiscountHelper {
 		mBannerVisible = false;
 	}
 
+	@Nullable
+	public static String getCurrentSaleTitle() {
+		return mData != null ? mData.message : null;
+	}
+
+	@Nullable
+	public static String getCurrentSaleDiscount(@NonNull OsmandApplication app, boolean nightMode) {
+		if (mData == null) {
+			return null;
+		}
+		InAppPurchaseHelper purchaseHelper = app.getInAppPurchaseHelper();
+		if (purchaseHelper == null) {
+			return null;
+		}
+		List<InAppSubscription> subscriptions = getCurrentSaleSubscriptions(app, purchaseHelper);
+		List<SubscriptionButton> buttons = PurchasingUtils.collectSubscriptionButtons(app, purchaseHelper, subscriptions, nightMode);
+		for (SubscriptionButton button : buttons) {
+			InAppSubscription subscription = button.getPurchaseItem();
+			if (button.isDiscountApplied()
+					&& subscription.getIntroductoryInfo() != null
+					&& !Algorithms.isEmpty(button.getDiscount())) {
+				return button.getDiscount();
+			}
+		}
+		return null;
+	}
+
+	@NonNull
+	private static List<InAppSubscription> getCurrentSaleSubscriptions(@NonNull OsmandApplication app,
+	                                                                   @NonNull InAppPurchaseHelper purchaseHelper) {
+		String planType = getCurrentSalePlanType();
+		if (CHOOSE_PLAN_TYPE_PRO.equals(planType)) {
+			return OsmAndProPlanFragment.getVisibleSubscriptions(app, purchaseHelper);
+		}
+		List<InAppSubscription> result = new ArrayList<>();
+		InAppPurchases purchases = purchaseHelper.getInAppPurchases();
+		List<InAppSubscription> visibleSubscriptions = purchaseHelper.getSubscriptions().getVisibleSubscriptions();
+		for (InAppSubscription subscription : visibleSubscriptions) {
+			boolean mapsSubscription = purchases.isMaps(subscription);
+			boolean proSubscription = purchases.isOsmAndPro(subscription);
+			if ((CHOOSE_PLAN_TYPE_MAPS_PLUS.equals(planType) || CHOOSE_PLAN_TYPE_FREE.equals(planType)) && mapsSubscription) {
+				result.add(subscription);
+			} else if ((CHOOSE_PLAN_TYPE_GENERAL.equals(planType) || planType == null) && (mapsSubscription || proSubscription)) {
+				result.add(subscription);
+			}
+		}
+		return result;
+	}
+
+	@Nullable
+	private static String getCurrentSalePlanType() {
+		if (mData == null || Algorithms.isEmpty(mData.url) || !mData.url.startsWith(SHOW_CHOOSE_PLAN_PREFIX)) {
+			return null;
+		}
+		return mData.url.substring(SHOW_CHOOSE_PLAN_PREFIX.length()).trim();
+	}
+
+	public static boolean hasCurrentSale() {
+		return mData != null && !Algorithms.isEmpty(mData.message);
+	}
+
+	public static boolean shouldShowCurrentSaleInDrawer(@NonNull OsmandApplication app) {
+		return hasCurrentSale();// && !hasAnyPurchase(app);
+	}
+
+	private static boolean hasAnyPurchase(@NonNull OsmandApplication app) {
+		return Version.isPaidVersion(app)
+				|| InAppPurchaseUtils.isFullVersionPurchased(app)
+				|| InAppPurchaseUtils.isMapsPlusPurchased(app)
+				|| InAppPurchaseUtils.isOsmAndProPurchased(app)
+				|| InAppPurchaseUtils.isLiveUpdatesPurchased(app)
+				|| InAppPurchaseUtils.isContourLinesPurchased(app)
+				|| InAppPurchaseUtils.isDepthContoursPurchased(app)
+				|| InAppPurchaseUtils.isPromoSubscribed(app)
+				|| InAppPurchaseUtils.isMapperUpdatesSubscribed(app);
+	}
+
+	public static void openCurrentSale(@NonNull MapActivity mapActivity) {
+		if (mData != null && !Algorithms.isEmpty(mData.url)) {
+			openUrl(mapActivity, mData.url);
+		} else {
+			ChoosePlanFragment.showDefaultInstance(mapActivity);
+		}
+	}
+
 	static void onDiscountBottomSheetClicked(@NonNull MapActivity mapActivity, @NonNull String url) {
 		mapActivity.getApp().logEvent("motd_click");
 		mBannerVisible = false;
@@ -408,6 +496,9 @@ public class DiscountHelper {
 					OsmAndProPlanFragment.showInstance(mapActivity, selectedButtonId);
 				}
 				break;
+			case CHOOSE_PLAN_TYPE_GENERAL:
+				ChoosePlanFragment.showDefaultInstance(mapActivity);
+				break;
 			case CHOOSE_PLAN_TYPE_SEA_DEPTH:
 				ChoosePlanFragment.showInstance(mapActivity, OsmAndFeature.NAUTICAL);
 				break;
@@ -486,6 +577,7 @@ public class DiscountHelper {
 		String iconId;
 		String url;
 		String textBtnTitle;
+		String discount;
 
 		@ColorInt
 		int iconColor = -1;
@@ -545,6 +637,7 @@ public class DiscountHelper {
 			res.iconId = obj.getString("icon");
 			res.url = parseUrl(app, obj.getString("url"));
 			res.textBtnTitle = obj.optString("button_title");
+			res.discount = obj.optString("discount");
 			res.iconColor = parseColor("icon_color_default_light", obj);
 			res.bgColor = parseColor("bg_color", obj);
 			res.titleColor = parseColor("title_color", obj);

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	>
+
+<!--	<androidx.appcompat.widget.AppCompatImageView-->
+<!--		android:id="@+id/icon"-->
+<!--		android:layout_width="wrap_content"-->
+<!--		android:layout_height="wrap_content"-->
+<!--		android:layout_gravity="center_vertical"-->
+<!--		android:layout_marginTop="8dp"-->
+<!--		android:layout_marginBottom="8dp"-->
+<!--		tools:src="@drawable/ic_action_label_sale" />-->
+
+	<androidx.appcompat.widget.AppCompatImageView
+		android:id="@+id/icon"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_vertical"
+		android:layout_marginLeft="24dp"
+		android:layout_marginStart="24dp"
+		android:gravity="center"
+		android:visibility="gone"
+		tools:visibility="visible" />
+
+	<TextView
+		android:id="@+id/title"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_vertical"
+		android:layout_marginLeft="11dp"
+		android:layout_marginStart="11dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginBottom="8dp"
+		android:layout_weight="1"
+		android:textSize="@dimen/default_list_text_size"
+		tools:text="Spring sale" />
+
+	<TextView
+		android:id="@+id/secondary_description"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_vertical"
+		android:background="@drawable/free_version_banner_cta_discount_bg"
+		android:gravity="center"
+		android:minWidth="52dp"
+		android:paddingLeft="@dimen/content_padding_half"
+		android:paddingRight="@dimen/content_padding_half"
+		android:paddingTop="@dimen/content_padding_small_half"
+		android:paddingBottom="@dimen/content_padding_small_half"
+		android:layout_marginEnd="24dp"
+		android:textColor="@color/active_buttons_and_links_text_light"
+		android:textSize="@dimen/default_desc_text_size"
+		tools:text="-50%" />
+
+</LinearLayout>
