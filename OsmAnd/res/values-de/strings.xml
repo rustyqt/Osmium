@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="gpx_dashed_line">Gestrichelte Linie</string>
     <string name="release_5_0">
     • Entdecken Sie top-bewertete POIs im neuen Erkundungsmodus\n\n
     • Alle OSM-Routen jetzt durchsuchbar! Wandern, Radfahren, MTB und mehr\n\n
